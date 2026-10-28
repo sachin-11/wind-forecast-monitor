@@ -1,0 +1,15 @@
+services:
+  api:
+    build: ./backend
+    environment:
+      DATA_SOURCE: ${DATA_SOURCE:-elexon}   # set DATA_SOURCE=sample to run fully offline
+    ports: ["8000:8000"]
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    depends_on:
+      api:
+        condition: service_healthy
+    ports: ["8080:80"]
+    restart: unless-stopped
